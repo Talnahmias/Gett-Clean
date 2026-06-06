@@ -1,32 +1,31 @@
-# Gett Clean
+# CleanersApp
 
-On-demand professional cleaning — a **Gett-style** experience for booking cleaners instead of taxi drivers.
+**Book a trusted cleaner in minutes** — on-demand or scheduled — with live job status like a ride.
 
-Book trusted cleaners in minutes, track their arrival and job progress in real time, and manage jobs from the cleaner side.
+A Gett-style two-sided marketplace: customers request cleaning jobs; vetted cleaners accept, perform, and get paid.
 
 ## Features
 
-- **Customer app** — pick a service (standard, deep, move-out, office), choose an address, and request a cleaner
-- **Live tracking** — status pipeline: searching → assigned → en route → in progress → completed
-- **Cleaner app** — go online/offline, accept incoming requests, advance job status
-- **Auto-matching** — nearest online cleaner is assigned when you book
-- **Gett-inspired UI** — dark header, yellow & green accents, mobile-first layout
+### Customer
+- **Book now** or **Schedule** with upfront pricing (packages + room count)
+- Live ETA and status tracker: Assigned → En route → Arrived → In progress → Completed
+- Pay with card on file, rate + tip, rebook
+
+### Cleaner
+- Go online/offline (verified cleaners only)
+- Incoming job offers with **60-second accept/decline**
+- Status updates + completion checklist
+- Earnings dashboard
+
+### Admin (MVP)
+- Verify pending cleaners (background check + insurance)
+- Suspend cleaners, monitor active jobs
 
 ## Tech stack
 
-- [Next.js 15](https://nextjs.org/) (App Router)
-- [TypeScript](https://www.typescriptlang.org/)
-- [Tailwind CSS 4](https://tailwindcss.com/)
-- [Prisma](https://www.prisma.io/) + SQLite
+Next.js 15 · TypeScript · Tailwind CSS 4 · Prisma · SQLite
 
 ## Getting started
-
-### Prerequisites
-
-- Node.js 20+
-- npm
-
-### Install & run
 
 ```bash
 npm install
@@ -39,32 +38,21 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ### Demo flow
 
-1. **Book a clean** — go to `/book`, pick a service and address, tap **Request cleaner**
-2. **Track** — you are redirected to `/track/[id]` with live status updates
-3. **Cleaner side** — open `/cleaner` in another tab, select a cleaner, advance the job through statuses
+1. **Customer** — `/book` → Book now → confirm → track on `/track/[id]`
+2. **Cleaner** — `/cleaner` → accept offer → advance through statuses → complete checklist
+3. **Admin** — `/admin` → verify Rina Katz (pending cleaner)
+
+See [docs/PRODUCT.md](docs/PRODUCT.md) for the full product plan.
 
 ## Scripts
 
 | Command | Description |
 |---------|-------------|
-| `npm run dev` | Start dev server |
+| `npm run dev` | Dev server |
 | `npm run build` | Production build |
-| `npm run start` | Start production server |
-| `npm run lint` | Run ESLint |
-| `npm run db:push` | Apply Prisma schema to SQLite |
-| `npm run db:seed` | Seed sample cleaners |
-
-## Project structure
-
-```
-src/
-  app/           # Pages & API routes
-  components/    # UI components
-  lib/           # Prisma client, booking logic, constants
-prisma/
-  schema.prisma  # Database schema
-  seed.ts        # Sample data
-```
+| `npm run lint` | ESLint |
+| `npm run db:push` | Sync schema |
+| `npm run db:seed` | Seed cleaners (5 verified + 1 pending) |
 
 ## License
 

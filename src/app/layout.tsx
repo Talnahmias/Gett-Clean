@@ -9,8 +9,9 @@ const geist = Geist({
 });
 
 export const metadata: Metadata = {
-  title: "Gett Clean — On-demand professional cleaning",
-  description: "Book trusted cleaners in minutes. Like Gett, but for your home.",
+  title: "CleanersApp — Book trusted cleaners in minutes",
+  description:
+    "On-demand or scheduled professional cleaning with live job status like a ride.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

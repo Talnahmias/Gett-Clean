@@ -9,11 +9,18 @@ datasource db {
 
 enum BookingStatus {
   SEARCHING
+  OFFERED
   ASSIGNED
   EN_ROUTE
+  ARRIVED
   IN_PROGRESS
   COMPLETED
   CANCELLED
+}
+
+enum BookingMode {
+  ON_DEMAND
+  SCHEDULED
 }
 
 enum ServiceType {
@@ -23,17 +30,31 @@ enum ServiceType {
   OFFICE
 }
 
+enum VerificationStatus {
+  PENDING
+  VERIFIED
+  SUSPENDED
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  REFUNDED
+}
+
 model Cleaner {
-  id        String    @id @default(cuid())
-  name      String
-  phone     String
-  rating    Float     @default(5.0)
-  jobsDone  Int       @default(0)
-  isOnline  Boolean   @default(false)
-  lat       Float     @default(32.0853)
-  lng       Float     @default(34.7818)
-  createdAt DateTime  @default(now())
-  bookings  Booking[]
+  id                 String             @id @default(cuid())
+  name               String
+  phone              String
+  rating             Float              @default(5.0)
+  jobsDone           Int                @default(0)
+  isOnline           Boolean            @default(false)
+  verificationStatus VerificationStatus @default(PENDING)
+  insuranceId        String?
+  lat                Float              @default(32.0853)
+  lng                Float              @default(34.7818)
+  createdAt          DateTime           @default(now())
+  bookings           Booking[]
 }
 
 model Customer {
@@ -45,19 +66,30 @@ model Customer {
 }
 
 model Booking {
-  id          String        @id @default(cuid())
-  status      BookingStatus @default(SEARCHING)
-  serviceType ServiceType
-  address     String
-  lat         Float
-  lng         Float
-  notes       String?
-  scheduledAt DateTime
-  price       Int
-  customerId  String
-  cleanerId   String?
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-  customer    Customer      @relation(fields: [customerId], references: [id])
-  cleaner     Cleaner?      @relation(fields: [cleanerId], references: [id])
+  id               String        @id @default(cuid())
+  status           BookingStatus @default(SEARCHING)
+  mode             BookingMode   @default(ON_DEMAND)
+  serviceType      ServiceType
+  address          String
+  lat              Float
+  lng              Float
+  roomCount        Int           @default(2)
+  notes            String?
+  scheduledAt      DateTime
+  price            Int
+  etaMinutes       Int?
+  offeredCleanerId String?
+  offerExpiresAt   DateTime?
+  checklistDone    String?
+  photoNote        String?
+  rating           Int?
+  tip              Int           @default(0)
+  paymentStatus    PaymentStatus @default(PENDING)
+  paidAt           DateTime?
+  customerId       String
+  cleanerId        String?
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+  customer         Customer      @relation(fields: [customerId], references: [id])
+  cleaner          Cleaner?      @relation(fields: [cleanerId], references: [id])
 }
