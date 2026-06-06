@@ -1,0 +1,63 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum BookingStatus {
+  SEARCHING
+  ASSIGNED
+  EN_ROUTE
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+enum ServiceType {
+  STANDARD
+  DEEP
+  MOVE_OUT
+  OFFICE
+}
+
+model Cleaner {
+  id        String    @id @default(cuid())
+  name      String
+  phone     String
+  rating    Float     @default(5.0)
+  jobsDone  Int       @default(0)
+  isOnline  Boolean   @default(false)
+  lat       Float     @default(32.0853)
+  lng       Float     @default(34.7818)
+  createdAt DateTime  @default(now())
+  bookings  Booking[]
+}
+
+model Customer {
+  id        String    @id @default(cuid())
+  name      String
+  phone     String
+  createdAt DateTime  @default(now())
+  bookings  Booking[]
+}
+
+model Booking {
+  id          String        @id @default(cuid())
+  status      BookingStatus @default(SEARCHING)
+  serviceType ServiceType
+  address     String
+  lat         Float
+  lng         Float
+  notes       String?
+  scheduledAt DateTime
+  price       Int
+  customerId  String
+  cleanerId   String?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  customer    Customer      @relation(fields: [customerId], references: [id])
+  cleaner     Cleaner?      @relation(fields: [cleanerId], references: [id])
+}
