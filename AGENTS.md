@@ -2,33 +2,44 @@
 
 Guidance for AI agents working in the Gett-Clean repository.
 
-## Repository status
+## Product
 
-This repository is currently an empty starter: a single `README.md` with the project title. There is no application source code, dependency manifest, test suite, linter configuration, or service definitions yet.
+**Gett Clean** is a Gett-style on-demand cleaning platform. Customers book cleaners; cleaners accept jobs and update status through a pipeline (searching → assigned → en route → in progress → completed).
 
 ## Development commands
 
-Until project scaffolding is added, there are no install, lint, test, build, or run commands defined in the repo.
+| Action | Command |
+|--------|---------|
+| Install | `npm install` |
+| DB setup | `npm run db:push && npm run db:seed` |
+| Dev server | `npm run dev` (http://localhost:3000) |
+| Lint | `npm run lint` |
+| Build | `npm run build` |
+| Production | `npm run start` |
 
-| Action | Command | Status |
-|--------|---------|--------|
-| Clone / update | `git pull origin main` | Available |
-| Install | — | Not defined |
-| Lint | — | Not defined |
-| Test | — | Not defined |
-| Build | — | Not defined |
-| Run (dev) | — | Not defined |
-
-When code is added, document the real commands here and in `README.md`.
+Copy `.env.example` to `.env` if missing. Default `DATABASE_URL` is `file:./dev.db` (SQLite under `prisma/`).
 
 ## Services
 
-No services are required to run today. When the project is scaffolded, update this section with required vs optional services and how to start them.
+| Service | Required? | How to start |
+|---------|-----------|--------------|
+| Next.js dev server | Yes | `npm run dev` |
+| SQLite (via Prisma) | Yes | Created by `npm run db:push` |
+
+No Docker or external services required for local development.
+
+## Key routes
+
+- `/` — landing
+- `/book` — customer booking flow
+- `/track/[id]` — live booking tracker
+- `/cleaner` — cleaner dashboard
+- `/api/bookings`, `/api/cleaners` — REST API
 
 ## Cursor Cloud specific instructions
 
-- **Update script**: No dependency refresh is needed; the VM update script is a no-op (`true`).
-- **Git**: The repo is functional. Use `git pull origin main` to sync before starting work.
-- **VM tooling**: Node.js (v22), npm/pnpm/yarn, Python 3.12, pip, and git are available on the Cloud Agent VM for future scaffolding.
-- **No runnable app yet**: Do not expect ports, health checks, or E2E flows until source code and a dependency manifest (for example `package.json`, `pyproject.toml`, or `docker-compose.yml`) are committed.
-- **When adding a stack**: Expand `README.md` with setup/run instructions, add the appropriate install command to the VM update script via `SetupVmEnvironment`, and replace the "Services" and "Development commands" sections above with concrete values.
+- **Update script**: `npm install` then `npm run db:push` (schema sync; seed is manual via `npm run db:seed`).
+- **First run**: After install, run `npm run db:seed` once if the cleaners table is empty.
+- **Port**: Dev server listens on **3000**.
+- **Dual-tab demo**: Customer flow on `/book`; cleaner actions on `/cleaner` — use two browser tabs to simulate both sides.
+- **Hot reload**: Prisma client regenerates on `postinstall`; after schema changes run `npm run db:push`.
